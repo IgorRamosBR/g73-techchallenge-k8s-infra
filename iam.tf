@@ -1,6 +1,6 @@
 # EKS ROLES
-resource "aws_iam_role" "demo" {
-  name = "eks-cluster-demo"
+resource "aws_iam_role" "eks_cluster_role" {
+  name = "eks-cluster-role"
 
   assume_role_policy = <<POLICY
 {
@@ -18,20 +18,20 @@ resource "aws_iam_role" "demo" {
 POLICY
 }
 
-resource "aws_iam_role_policy_attachment" "demo-AmazonEKSClusterPolicy" {
+resource "aws_iam_role_policy_attachment" "AmazonEKSClusterPolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
-  role       = aws_iam_role.demo.name
+  role       = aws_iam_role.eks_cluster_role.name
 }
 
 # IAM CERTIFICADO EKS
 data "tls_certificate" "eks" {
-  url = aws_eks_cluster.demo.identity[0].oidc[0].issuer
+  url = aws_eks_cluster.eks_cluster.identity[0].oidc[0].issuer
 }
 
 resource "aws_iam_openid_connect_provider" "eks" {
   client_id_list  = ["sts.amazonaws.com"]
   thumbprint_list = [data.tls_certificate.eks.certificates[0].sha1_fingerprint]
-  url             = aws_eks_cluster.demo.identity[0].oidc[0].issuer
+  url             = aws_eks_cluster.eks_cluster.identity[0].oidc[0].issuer
 }
 
 # IAM TESTE EKS

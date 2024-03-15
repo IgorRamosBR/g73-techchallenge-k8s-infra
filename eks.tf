@@ -1,7 +1,7 @@
 # EKS
-resource "aws_eks_cluster" "demo" {
-  name     = "demo"
-  role_arn = aws_iam_role.demo.arn
+resource "aws_eks_cluster" "eks_cluster" {
+  name     = "eks-cluster"
+  role_arn = aws_iam_role.eks_cluster_role.arn
 
   vpc_config {
     subnet_ids = [
@@ -12,7 +12,7 @@ resource "aws_eks_cluster" "demo" {
     ]
   }
 
-  depends_on = [aws_iam_role_policy_attachment.demo-AmazonEKSClusterPolicy]
+  depends_on = [aws_iam_role_policy_attachment.AmazonEKSClusterPolicy]
 }
 
 # NODES
@@ -47,7 +47,7 @@ resource "aws_iam_role_policy_attachment" "nodes-AmazonEC2ContainerRegistryReadO
 }
 
 resource "aws_eks_node_group" "private-nodes" {
-  cluster_name    = aws_eks_cluster.demo.name
+  cluster_name    = aws_eks_cluster.eks_cluster.name
   node_group_name = "private-nodes"
   node_role_arn   = aws_iam_role.nodes.arn
 
