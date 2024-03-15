@@ -1,3 +1,12 @@
+variable g73_techchallenge_db_username {
+  type        = string
+  description = "AWS RDS username"
+}
+variable g73_techchallenge_db_password {
+  type        = string
+  description = "AWS RDS password"
+}
+
 resource "aws_db_instance" "g73_techchallenge_db" {
   allocated_storage    = 20
   storage_type         = "gp2"
